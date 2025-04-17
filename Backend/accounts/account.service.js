@@ -86,20 +86,32 @@ async function register(params, origin) {
 
     // create account object
     const account = new db.Account(params);
-    
+
     // first registered account is an admin
     const isFirstAccount = (await db.Account.count()) === 0;
     account.role = isFirstAccount ? Role.Admin : Role.User;
     account.verificationToken = randomTokenString();
-    
+
+    console.log("[DEV] Verification token for", account.email, ":", account.verificationToken);
+
     // hash password
     account.passwordHash = await hash(params.password);
-    
+
     // save account
     await account.save();
-    
-    // send email
-    await sendVerificationEmail(account, origin);
+
+    // ⚠️ Try sending email but don’t block success if it fails
+    try {
+        await sendVerificationEmail(account, origin);
+    } catch (err) {
+        console.error("Email sending failed:", err.message);
+    }
+
+    // ✅ Still return the token
+    return {
+        message: 'Registration successful, please check your email for verification instructions',
+        verificationToken: account.verificationToken
+    };
 }
 
 async function verifyEmail({ token }) {
