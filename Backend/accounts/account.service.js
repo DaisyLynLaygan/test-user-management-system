@@ -109,8 +109,8 @@ async function register(params, origin) {
 
     // ✅ Still return the token
     return {
-        message: 'Registration successful, please check your email for verification instructions',
-        verificationToken: account.verificationToken
+        message: 'Registration successful, please check your email for verification instructions'
+        
     };
 }
 
