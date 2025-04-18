@@ -22,7 +22,6 @@ module.exports = {
     update,
     delete: _delete
 };
-
 async function authenticate({ email, password, ipAddress }) {
     const account = await db.Account.scope('withHash').findOne({ where: { email } });
 

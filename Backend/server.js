@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+app.use('/api-docs', require('./_helpers/swagger'));
 const errorHandler = require('./_middleware/error_handler');
 
 app.use(bodyParser.urlencoded({ extended: false }));
